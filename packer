@@ -1,0 +1,2 @@
+#!/bin/bash -e
+/usr/bin/env packer build -var-file=packer-vars.json -var-file=packer-user-vars.json "$@" packer.json

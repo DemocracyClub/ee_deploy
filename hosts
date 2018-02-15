@@ -1,0 +1,8 @@
+[remote:children]
+production
+
+[servers:children]
+production
+
+[production]
+EE_Packer

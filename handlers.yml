@@ -1,0 +1,22 @@
+---
+- name: restart nginx
+  service: name=nginx state=restarted
+  become: True
+  become_user: root
+
+- name: reload nginx
+  service: name=nginx state=reloaded
+  become: True
+
+- name: restart web frontend
+  action: service name={{ project_name }}_gunicorn state=restarted
+  become: True
+  become_user: root
+
+- name: reload systemd
+  become: True
+  command: systemctl daemon-reload
+
+#- name: restart rsyslog
+#  service: name=rsyslog state=restarted
+#  become: True

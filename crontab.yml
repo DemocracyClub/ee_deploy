@@ -1,0 +1,25 @@
+---
+- hosts: all
+  vars_files:
+    - vars.yml
+  gather_facts: true
+  become: true
+  become_user: "{{ project_name }}"
+  tasks:
+
+  - cronvar:
+      name: MAILTO
+      value: "{{ cron_email }}"
+      user: "{{ project_name }}"
+
+  - name: Schedule 'Dump elections models' job
+    cron:
+      name: "Dump elections models"
+      minute: 5
+      job: "/usr/local/bin/output-on-error /var/www/{{ project_name }}/env/bin/python /var/www/{{ project_name }}/code/manage.py dumpdata elections election_snooper --indent 4 -o /var/www/{{ project_name }}/code/every_election/data/elections.json"
+
+  - name: Schedule 'Scrape to find new elections' job
+    cron:
+      name: "Scrape to find new elections"
+      minute: 30
+      job: "/usr/local/bin/output-on-error /var/www/{{ project_name }}/env/bin/python /var/www/{{ project_name }}/code/manage.py snoop"

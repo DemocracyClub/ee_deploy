@@ -1,0 +1,30 @@
+---
+project_name: every_election
+project_root: /var/www/every_election
+app_name: every_election
+project_repo: https://github.com/DemocracyClub/EveryElection.git
+branch: master
+domain: elections.democracyclub.org.uk
+nickname: production
+cron_email: developers@democracyclub.org.uk
+
+system_packages:
+  - aptitude
+  - binutils
+  - build-essential
+  - curl
+  - gdal-bin
+  - git
+  - libproj-dev
+  - nginx
+  - postfix
+  - python3-dev
+  - python-setuptools
+  - s3cmd
+
+python_packages:
+  - pip
+  - virtualenv
+
+initfiles:
+  - gunicorn

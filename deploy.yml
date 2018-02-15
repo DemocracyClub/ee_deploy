@@ -1,0 +1,36 @@
+---
+- hosts: all
+  vars_files:
+    - vars.yml
+    - vault.yml
+  become: true
+  become_user: "{{ project_name }}"
+  handlers:
+    - include: handlers.yml
+      static: yes
+
+  tasks:
+
+  - name: Pull sources from the repository.
+    git:
+      repo: "{{ project_repo }}"
+      dest: "{{ project_root }}/code/"
+      version: "{{ branch }}"
+      accept_hostkey: true
+    notify:
+      - restart web frontend
+
+  - name: Upload configuration.
+    template: src=webapp_settings/{{ nickname }}.py dest={{ project_root }}/code/{{ app_name }}/settings/local.py
+    notify:
+      - restart web frontend
+
+  - name: Upgrade the virtualenv.
+    pip: requirements={{ project_root }}/code/requirements/production.txt virtualenv={{ project_root }}/env virtualenv_python="python3"
+
+  - name: Generate Django media.
+    command: "./env/bin/python code/manage.py collectstatic --noinput"
+    args:
+      chdir: "{{ project_root }}"
+
+- include: crontab.yml
