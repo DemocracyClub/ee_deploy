@@ -10,7 +10,7 @@
         vpc_id: vpc-110bfc78
     vpc_id: "{{ regions[region].vpc_id }}"
     ami_id: "{{ regions[region].ami_id }}"
-    lc_num: 7
+    lc_num: 14
 
     elb_ssl_arn: "arn:aws:acm:eu-west-2:929325949831:certificate/e373b9cf-d3b0-4f3d-9dd9-cce55239182d"
     old_lc_num: "{{ lc_num - 1 }}"
@@ -99,7 +99,7 @@
         image_id: "{{ ami_id }}"
         instance_type: t2.micro
         security_groups: ["{{ sg_instance.group_id }}"]
-        user_data: "{{lookup('file', 'userdata.yml') }}"
+        user_data: "{{lookup('template', 'userdata.yml') }}"
         instance_profile_name: ee-packer-ami-builder
       register: launchconfig
       when: not spot_price is defined

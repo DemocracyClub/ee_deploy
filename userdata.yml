@@ -14,3 +14,6 @@ users:
 runcmd:
   - "/var/www/every_election/env/bin/python /var/www/every_election/code/manage.py dumpdata elections election_snooper --indent 4 -o /var/www/every_election/code/every_election/data/elections.json"
   - "chown every_election:every_election /var/www/every_election/code/every_election/data/elections.json"
+{% if aws_env == 'test' %}
+  - "/etc/init.d/cron stop"
+{% endif %}
