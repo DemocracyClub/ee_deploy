@@ -1,0 +1,133 @@
+---
+- hosts: 127.0.0.1
+  connection: local
+  vars:
+    region: "{{ lookup('env', 'AWS_REGION') or 'eu-west-2' }}"
+    regions:
+      eu-west-2:
+        ami_id: ami-ad7e9bca
+        # The default VPC
+        vpc_id: vpc-110bfc78
+    vpc_id: "{{ regions[region].vpc_id }}"
+    ami_id: "{{ regions[region].ami_id }}"
+    lc_num: 7
+
+    elb_ssl_arn: "arn:aws:acm:eu-west-2:929325949831:certificate/e373b9cf-d3b0-4f3d-9dd9-cce55239182d"
+    old_lc_num: "{{ lc_num - 1 }}"
+    aws_env: "{{ lookup('env', 'ENVIRONMENT') or 'test' }}"
+
+  environment:
+    AWS_REGION: "{{ region }}"
+
+
+  tasks:
+    - ec2_vpc_subnet_facts:
+        filters:
+          vpc-id: "{{ vpc_id }}"
+      register: subnets
+
+
+    - name: ELB security group
+      ec2_group:
+        name: "ee-elb-{{ aws_env }}"
+        description: "ELB http security group"
+        vpc_id: "{{ vpc_id }}"
+        rules:
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            from_port: 443
+            to_port: 443
+            cidr_ip: 0.0.0.0/0
+      register: sg_elb
+
+
+    - name: Instance Security Group
+      ec2_group:
+        name: "ee-asg-{{ aws_env }}"
+        description: "Allow access for HTTP from the ELB"
+        vpc_id: "{{ vpc_id }}"
+        rules:
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            group_id: "{{ sg_elb.group_id }}"
+      register: sg_instance
+
+
+    # this will fail first time becasue we're not adding any instances to it :(
+    - name: Elastic Load Balancer
+      ec2_elb_lb:
+        name: "ee-{{ aws_env }}"
+        state: present
+        security_group_ids: "{{ sg_elb.group_id }}"
+        # When the ELB is not having much traffic we'll only have ELB nodes in
+        # 2 AZs, but instances in 3. This settings makes it send traffic to all
+        # backend instances in that case
+        cross_az_load_balancing: True
+        connection_draining_timeout: 20
+        listeners:
+          - protocol: http
+            load_balancer_port: 80
+            instance_port: 80
+          - protocol: https
+            load_balancer_port: 443
+            instance_port: 80
+            instance_protocol: http
+            ssl_certificate_id: "{{ elb_ssl_arn }}"
+        health_check:
+          ping_protocol: http
+          ping_port: 80
+          ping_path: "/reference_definition"
+          response_timeout: 2
+          interval: 60
+          unhealthy_threshold: 5
+          healthy_threshold: 2
+        subnets: "{{ subnets.subnets | map(attribute='id') |list }}"
+        tags:
+          Env: "{{ aws_env }}"
+          Name: "ee-{{ aws_env }}"
+      register: elb_result
+
+
+    - name: On-demand Launch Config
+      ec2_lc:
+        name: "ee_{{ aws_env }}-{{ lc_num }}"
+        assign_public_ip: yes
+        image_id: "{{ ami_id }}"
+        instance_type: t2.micro
+        security_groups: ["{{ sg_instance.group_id }}"]
+        user_data: "{{lookup('file', 'userdata.yml') }}"
+        instance_profile_name: ee-packer-ami-builder
+      register: launchconfig
+      when: not spot_price is defined
+
+
+    - name: On-demand Autoscaling group
+      ec2_asg:
+        name: "ee-asg-{{ aws_env }}"
+        state: present
+        tags:
+          - Env: "{{ aws_env }}"
+            Name: ee-asg
+        desired_capacity: 1
+        health_check_type: EC2
+        launch_config_name: "{{launchconfig.name}}"
+        load_balancers: ["{{ elb_result.elb.name }}"]
+        max_size: 10
+        min_size: 1
+        replace_all_instances: "{{ replace_all|default(False) }}"
+        termination_policies: [ OldestLaunchConfiguration, ClosestToNextInstanceHour ]
+        # Yes, subnets go in vpc_zone_identifier. Blame Garethr.
+        vpc_zone_identifier: "{{ subnets.subnets | map(attribute='id') |list }}"
+        # Wait for this long to replace old instances
+        wait_timeout: 300
+      when: not spot_price is defined
+
+
+    - name: Delete old unused on-demand Launch Configs
+      ec2_lc:
+        name: "ee_{{ aws_env }}-{{ old_lc_num }}"
+        state: absent
