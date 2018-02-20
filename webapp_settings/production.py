@@ -19,7 +19,7 @@ DATABASES = {
         'NAME': '{{ project_name }}',
         'USER': '{{ project_name }}',
         'PASSWORD': '{{ vault_DATABASE_PASSWORD }}',
-        'HOST': 'every-election.ckbnvhqnbwf2.eu-west-2.rds.amazonaws.com',
+        'HOST': '{{ vault_DATABASE_HOST }}',
         'PORT': '5432',
     }
 }

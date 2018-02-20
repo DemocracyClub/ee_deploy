@@ -128,4 +128,20 @@
       dest: "{{ project_root }}/home/.bashrc"
       line: 'cd && cd ../code && source ../env/bin/activate'
 
+  - name: Install .pgpass file
+    template:
+      src: "files/conf/.pgpass"
+      dest: "{{ project_root }}/home/.pgpass"
+      owner: every_election
+      group: every_election
+      mode: 0600
+
+  - name: Install backup_db_to_s3 script
+    template:
+      src: "files/scripts/backup_db_to_s3.sh"
+      dest: "{{ project_root }}/home/backup_db_to_s3.sh"
+      owner: every_election
+      group: every_election
+      mode: 0755
+
 - include: deploy.yml
