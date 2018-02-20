@@ -1,4 +1,5 @@
 from .base import PIPELINE
+import socket
 
 
 DEBUG = False
@@ -9,8 +10,10 @@ ADMINS = (
 )
 MANAGERS = ADMINS
 
-ALLOWED_HOSTS = [
+local_ip_addresses = [(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close())[1] for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]]
+ALLOWED_HOSTS = local_ip_addresses + [
     "elections.democracyclub.org.uk",
+    "www.elections.democracyclub.org.uk",
 ]
 
 DATABASES = {
