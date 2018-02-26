@@ -5,6 +5,8 @@ import socket
 DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
+SECRET_KEY = '{{ vault_SECRET_KEY }}'
+
 ADMINS = (
     ('Sym Roe', 'developers+{{ project_name }}@democracyclub.org.uk'),
 )
