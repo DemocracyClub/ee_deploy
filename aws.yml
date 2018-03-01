@@ -82,8 +82,8 @@
           ping_port: 80
           ping_path: "/reference_definition/"
           response_timeout: 2
-          interval: 60
-          unhealthy_threshold: 5
+          interval: 30
+          unhealthy_threshold: 8
           healthy_threshold: 2
         subnets: "{{ subnets.subnets | map(attribute='id') |list }}"
         tags:
