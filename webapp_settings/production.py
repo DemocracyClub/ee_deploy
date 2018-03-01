@@ -1,4 +1,4 @@
-from .base import PIPELINE
+from .base import *
 import socket
 
 
