@@ -16,16 +16,26 @@
     cron:
       name: "Dump elections models"
       minute: 5
-      job: "/usr/local/bin/output-on-error /var/www/{{ project_name }}/env/bin/python /var/www/{{ project_name }}/code/manage.py dumpdata elections election_snooper --indent 4 -o /var/www/{{ project_name }}/code/every_election/data/elections.json"
+      job: "/usr/local/bin/output-on-error {{ project_root }}/env/bin/python {{ project_root }}/code/manage.py dumpdata elections election_snooper --indent 4 -o {{ project_root }}/code/every_election/data/elections.json"
 
   - name: Schedule 'Scrape to find new elections' job
     cron:
       name: "Scrape to find new elections"
       minute: 30
-      job: "/usr/local/bin/output-on-error /var/www/{{ project_name }}/env/bin/python /var/www/{{ project_name }}/code/manage.py snoop"
+      job: "/usr/local/bin/output-on-error {{ project_root }}/env/bin/python {{ project_root }}/code/manage.py snoop"
 
   - name: Schedule 'Run database backup' job
     cron:
       name: "Run database backup"
       minute: 8
       job: "/usr/local/bin/output-on-error ~/backup_db_to_s3.sh"
+
+  - name: "Schedule 'Generate map layers and sync to S3' job"
+    cron:
+      name: "Generate map layers and sync to S3"
+      hour: 1
+      minute: 40
+      job: "/usr/local/bin/output-on-error \
+        {{ project_root }}/env/bin/python {{ project_root }}/code/manage.py export_boundaries --output {{ project_root }}/code/every_election/data/maps && \
+        s3cmd put -r {{ project_root }}/code/every_election/data/maps/ s3://ee-maps/ --acl-public -m \"application/json\" && \
+        rm {{ project_root }}/code/every_election/data/maps/*"
