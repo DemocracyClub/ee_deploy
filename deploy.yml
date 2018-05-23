@@ -28,6 +28,9 @@
   - name: Upgrade the virtualenv.
     pip: requirements={{ project_root }}/code/requirements/production.txt virtualenv={{ project_root }}/env virtualenv_python="python3"
 
+  - name: Install node dependencies.
+    npm: path={{ project_root }}/code
+
   - name: Generate Django media.
     command: "./env/bin/python code/manage.py collectstatic --noinput --clear"
     args:
