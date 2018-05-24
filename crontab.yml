@@ -35,7 +35,4 @@
       name: "Generate map layers and sync to S3"
       hour: 1
       minute: 40
-      job: "/usr/local/bin/output-on-error \
-        {{ project_root }}/env/bin/python {{ project_root }}/code/manage.py export_boundaries --output {{ project_root }}/code/every_election/data/maps && \
-        s3cmd put -r {{ project_root }}/code/every_election/data/maps/ s3://ee-maps/ --acl-public -m \"application/json\" && \
-        rm {{ project_root }}/code/every_election/data/maps/*"
+      job: "/usr/local/bin/output-on-error ~/sync_map_layers_to_s3.sh"
