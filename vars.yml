@@ -25,6 +25,7 @@ system_packages:
   - python3-dev
   - python-setuptools
   - s3cmd
+  - unzip
 
 python_packages:
   - pip
