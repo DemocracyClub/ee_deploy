@@ -29,6 +29,7 @@ DATABASES = {
     }
 }
 
+STATICFILES_STORAGE = 'pipeline.storage.PipelineCachedStorage'
 PIPELINE['SASS_BINARY'] = "/var/www/{{ project_name }}/env/bin/sassc"
 PIPELINE['JS_COMPRESSOR'] = "pipeline.compressors.jsmin.JSMinCompressor"
 
