@@ -5,12 +5,12 @@
     region: "{{ lookup('env', 'AWS_REGION') or 'eu-west-2' }}"
     regions:
       eu-west-2:
-        ami_id: ami-0055498d29c693639
+        ami_id: ami-0d07e509ff10a0a42
         # The default VPC
         vpc_id: vpc-110bfc78
     vpc_id: "{{ regions[region].vpc_id }}"
     ami_id: "{{ regions[region].ami_id }}"
-    lc_num: 19
+    lc_num: 20
 
     elb_ssl_arn: "arn:aws:acm:eu-west-2:929325949831:certificate/e373b9cf-d3b0-4f3d-9dd9-cce55239182d"
     old_lc_num: "{{ lc_num - 1 }}"
