@@ -3,6 +3,7 @@
 ## Setup
 
 * `pip install -r requirements.txt`
+* `ansible-galaxy install -r requirements.yml`
 * Ensure your AWS credentials are in `~/.aws/credentials`
 * create `.vault_pass.txt` with your vault password
 

@@ -7,17 +7,13 @@
       changed_when: 'output.stdout != ""'
     - name: setup
       setup: filter=ansible_*
-    - name: Install output on error
-      template:
-        src: files/scripts/output-on-error
-        dest: /usr/local/bin/output-on-error
-        mode: 0777
-      become_user: root
   vars_files:
     - vars.yml
     - vault.yml
   gather_facts: false
   become: true
+  roles:
+    - dc_commonscripts
   handlers:
     - include: handlers.yml
 
