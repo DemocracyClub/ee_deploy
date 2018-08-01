@@ -13,7 +13,9 @@
   gather_facts: false
   become: true
   roles:
-    - dc_commonscripts
+    - role: dc_commonscripts
+    - role: dc_papertrail
+      papertrail_log_destination: "{{ vault_papertrail_url }}"
   handlers:
     - include: handlers.yml
 
@@ -110,14 +112,6 @@
     notify:
       - restart web frontend
       - restart nginx
-
-  - name: Install rsyslog configuration files
-    template: src={{item.src}} dest={{item.dst}}
-    with_items:
-      - { 'src': 'files/conf/rsyslog/rsyslog.conf', 'dst': '/etc/rsyslog.conf' }
-      - { 'src': 'files/conf/rsyslog/nginx.conf', 'dst': '/etc/rsyslog.d/nginx.conf' }
-    notify:
-      - restart rsyslog
 
   - name: Set up handy bashrc file
     lineinfile:
