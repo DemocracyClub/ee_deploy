@@ -4,7 +4,8 @@
     "build_region": "eu-west-2",
     "branch": "master",
     "max_spot_price": "0.1",
-    "ssh_private_key_file": null
+    "ssh_private_key_file": null,
+    "app_name": "every_election"
   },
   "builders": [
     {
@@ -21,10 +22,20 @@
       "spot_price": "{{user `max_spot_price` }}",
       "ssh_username": "ubuntu",
       "tags": {
+        "application": "{{user `app_name` }}",
         "build_date":"{{isotime}}"
       },
       "run_tags": {
+        "application": "{{user `app_name` }}",
         "Name": "packer-ami-build"
+      },
+      "run_volume_tags": {
+        "application": "{{user `app_name` }}",
+        "build_date":"{{isotime}}"
+      },
+      "snapshot_tags": {
+        "application": "{{user `app_name` }}",
+        "build_date":"{{isotime}}"
       },
       "launch_block_device_mappings": [
         {
