@@ -12,7 +12,7 @@
     ami_id: "{{ regions[region].ami_id }}"
     lc_num: 23
 
-    elb_ssl_arn: "arn:aws:acm:eu-west-2:929325949831:certificate/e373b9cf-d3b0-4f3d-9dd9-cce55239182d"
+    elb_ssl_arn: "arn:aws:acm:eu-west-2:929325949831:certificate/f353d7fd-fc69-44da-91c5-2bf8225e44ce"
     old_lc_num: "{{ lc_num - 1 }}"
     aws_env: "{{ lookup('env', 'ENVIRONMENT') or 'test' }}"
 
