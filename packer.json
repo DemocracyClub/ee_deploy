@@ -27,7 +27,8 @@
       },
       "run_tags": {
         "application": "{{user `app_name` }}",
-        "Name": "packer-ami-build"
+        "Name": "packer-ami-build",
+        "Env": "packer-ami-build"
       },
       "run_volume_tags": {
         "application": "{{user `app_name` }}",
