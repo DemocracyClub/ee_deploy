@@ -81,3 +81,14 @@ if SERVER_ENVIRONMENT in ['prod', 'test']:
 
 if SERVER_ENVIRONMENT == 'prod':
     SLACK_WEBHOOK_URL = '{{ vault_SLACK_WEBHOOK_URL }}'
+
+
+if SERVER_ENVIRONMENT == 'test':
+    BASICAUTH_DISABLE = False
+    BASICAUTH_REALM = 'Staging'
+    BASICAUTH_USERS = {
+        'staging': 'staging'
+    }
+    BASICAUTH_ALWAYS_ALLOW_URLS = [
+        r'^/reference_definition/$',
+    ]
