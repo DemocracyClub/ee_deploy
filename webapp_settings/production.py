@@ -109,4 +109,7 @@ if SERVER_ENVIRONMENT == 'test':
     }
     BASICAUTH_ALWAYS_ALLOW_URLS = [
         r'^/reference_definition/$',
+        # Django Rest Framework does not play nicely with django-basicauth
+        # TODO: can we fix this?
+        r'^/api/.*$',
     ]
