@@ -1,5 +1,6 @@
 from .base import *
 from ec2_tag_conditional.util import InstanceTags
+import raven
 import socket
 
 
@@ -23,6 +24,20 @@ TEMPLATE_DEBUG = DEBUG
 
 SECRET_KEY = '{{ vault_SECRET_KEY }}'
 
+RAVEN_CONFIG = {
+    'dsn': '{{ vault_sentry_dsn }}',
+}
+INSTALLED_APPS.append('raven.contrib.django.raven_compat')
+LOGGING['handlers']['sentry'] = {
+    'level': 'WARNING',
+    'class': 'raven.contrib.django.raven_compat.handlers.SentryHandler',
+}
+LOGGING['loggers']['elections.query_helpers'] = {
+    'level': 'WARNING',
+    'handlers': ['sentry'],
+    'propagate': False,
+}
+
 ADMINS = (
     ('Sym Roe', 'developers+{{ project_name }}@democracyclub.org.uk'),
 )
@@ -45,6 +60,9 @@ SERVER_ENVIRONMENT = get_env()
 
 
 # settings that are conditional on env
+
+RAVEN_CONFIG['environment'] = SERVER_ENVIRONMENT
+
 
 local_ip_addresses = [(s.connect(('8.8.8.8', 53)), s.getsockname()[0], s.close())[1] for s in [socket.socket(socket.AF_INET, socket.SOCK_DGRAM)]]
 if SERVER_ENVIRONMENT == 'packer-ami-build':
