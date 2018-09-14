@@ -113,7 +113,7 @@
           - Env: "{{ aws_env }}"
             Name: ee-asg
         desired_capacity: 1
-        health_check_type: EC2
+        health_check_type: ELB
         launch_config_name: "{{launchconfig.name}}"
         load_balancers: ["{{ elb_result.elb.name }}"]
         max_size: 10
