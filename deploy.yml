@@ -6,8 +6,7 @@
   become: true
   become_user: "{{ project_name }}"
   handlers:
-    - include: handlers.yml
-      static: yes
+    - import_tasks: handlers.yml
 
   tasks:
 
@@ -36,4 +35,4 @@
     args:
       chdir: "{{ project_root }}"
 
-- include: crontab.yml
+- import_playbook: crontab.yml

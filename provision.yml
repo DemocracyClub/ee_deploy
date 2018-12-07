@@ -17,7 +17,7 @@
     - role: dc_papertrail
       papertrail_log_destination: "{{ vault_papertrail_url }}"
   handlers:
-    - include: handlers.yml
+    - import_tasks: handlers.yml
 
   tasks:
 
@@ -36,8 +36,10 @@
     shell: DEBIAN_FRONTEND=noninteractive dpkg-reconfigure locales
 
   - name: Install required system packages.
-    apt: pkg={{ item }} state=installed update-cache=yes
-    with_items: "{{ system_packages }}"
+    apt:
+      name: "{{ system_packages }}"
+      state: present
+      update_cache: yes
 
   - name: Update all packages
     apt: upgrade=safe
@@ -142,4 +144,4 @@
       group: every_election
       mode: 0755
 
-- include: deploy.yml
+- import_playbook: deploy.yml
