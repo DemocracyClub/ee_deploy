@@ -17,18 +17,18 @@ system_packages:
   - git
   - libproj-dev
   - nginx
-  - nodejs-legacy
+  - nodejs
   - npm
   - postfix
-  - postgresql-client-9.5
+  - postgresql-client-10
   - postgresql-client-common
   - python3-dev
   - python-setuptools
+  - python-pip
   - s3cmd
   - unzip
 
 python_packages:
-  - pip
   - virtualenv
 
 initfiles:
