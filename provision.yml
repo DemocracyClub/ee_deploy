@@ -44,6 +44,12 @@
   - name: Update all packages
     apt: upgrade=safe
 
+  - name: Upgrade NPM
+    npm:
+      name: npm
+      global: true
+      state: latest
+
   - name: Install required Python packages.
     pip:
       name: "{{ python_packages }}"
