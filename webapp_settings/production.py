@@ -55,6 +55,15 @@ AWS_SECRET_ACCESS_KEY = '{{ vault_AWS_SECRET_ACCESS_KEY }}'
 EMAIL_SIGNUP_API_KEY = '{{ vault_EMAIL_SIGNUP_API_KEY }}'
 
 
+DEFAULT_FROM_EMAIL = 'everyelection@democracyclub.org.uk'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_PORT = 587
+EMAIL_HOST = 'email-smtp.eu-west-1.amazonaws.com'
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = '{{ vault_smtp_username }}'
+EMAIL_HOST_PASSWORD = '{{ vault_smtp_password }}'
+
+
 # infer environment from the EC2 tags
 SERVER_ENVIRONMENT = get_env()
 
