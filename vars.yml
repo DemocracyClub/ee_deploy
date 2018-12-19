@@ -25,11 +25,11 @@ system_packages:
   - python3-dev
   - python-setuptools
   - python-pip
-  - s3cmd
   - unzip
 
 python_packages:
   - virtualenv
+  - s3cmd
 
 initfiles:
   - gunicorn

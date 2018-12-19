@@ -36,9 +36,9 @@ then
 fi
 
 # # upload backup to s3
-/usr/bin/s3cmd put $SRCDIR/$NOWDATE-backup.dump s3://$SHORT_TERM_BUCKET/$DESTDIR/ --storage-class=STANDARD_IA
+/usr/local/bin/s3cmd put $SRCDIR/$NOWDATE-backup.dump s3://$SHORT_TERM_BUCKET/$DESTDIR/ --storage-class=STANDARD_IA
 
-/usr/bin/s3cmd expire s3://$SHORT_TERM_BUCKET --expiry-days=60
+/usr/local/bin/s3cmd expire s3://$SHORT_TERM_BUCKET --expiry-days=60
 
 
 #remove all files in our source directory
