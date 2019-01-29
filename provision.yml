@@ -74,14 +74,6 @@
   - name: Change permissions.
     shell: "chown -R {{ project_name }}:{{ project_name }} {{ project_root }}"
 
-  - name: Install .s3cfg file
-    template:
-      src: "files/conf/s3cfg"
-      dest: "{{ project_root }}/home/.s3cfg"
-      group: "{{ project_name }}"
-      owner: "{{ project_name }}"
-      mode: 0755
-
   - name: Install nginx configuration file.
     template: src=files/conf/nginx.conf dest=/etc/nginx/sites-enabled/{{ project_name }}
     notify: restart nginx
