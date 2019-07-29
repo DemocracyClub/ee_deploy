@@ -91,19 +91,35 @@ if SERVER_ENVIRONMENT == 'packer-ami-build':
     DATABASES = {}
 if SERVER_ENVIRONMENT in ['prod', 'test']:
     DATABASES = {
+        # read/write primary instance
         'default': {
             'ENGINE': 'django.contrib.gis.db.backends.postgis',
             'NAME': '',
             'USER': '{{ project_name }}',
             'PASSWORD': '{{ vault_DATABASE_PASSWORD }}',
-            'HOST': '{{ vault_DATABASE_HOST }}',
+            'HOST': '{{ vault_DEFAULT_DATABASE_HOST }}',
+            'PORT': '5432',
+        },
+        # additional capacity for serving API reads
+        # if we only want one instance, we can alias
+        # vault_REPLICAS_DATABASE_HOST to vault_DEFAULT_DATABASE_HOST
+        # with a single CNAME in Route53
+        'replicas': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': '',
+            'USER': '{{ project_name }}',
+            'PASSWORD': '{{ vault_DATABASE_PASSWORD }}',
+            'HOST': '{{ vault_REPLICAS_DATABASE_HOST }}',
             'PORT': '5432',
         }
     }
     if SERVER_ENVIRONMENT == 'prod':
         DATABASES['default']['NAME'] = '{{ project_name }}'
+        DATABASES['replicas']['NAME'] = '{{ project_name }}'
     if SERVER_ENVIRONMENT == 'test':
         DATABASES['default']['NAME'] = 'ee_staging'
+        DATABASES['replicas']['NAME'] = 'ee_staging'
+    DATABASE_ROUTERS = ["every_election.db_routers.DbRouter"]
 
 
 if SERVER_ENVIRONMENT == 'prod':

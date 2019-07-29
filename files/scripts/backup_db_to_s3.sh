@@ -22,7 +22,7 @@ SHORT_TERM_BUCKET='dc-ee-short-term-backups'
 # make the temp directory if it doesn't exist
 mkdir -p $SRCDIR
 
-pg_dump --host={{ vault_DATABASE_HOST }} -Fc {{ project_name }} -f $SRCDIR/$NOWDATE-backup.dump
+pg_dump --host={{ vault_DEFAULT_DATABASE_HOST }} -Fc {{ project_name }} -f $SRCDIR/$NOWDATE-backup.dump
 
 if [ $? -ne 0 ]
 then
