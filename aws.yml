@@ -2,6 +2,7 @@
 - hosts: 127.0.0.1
   connection: local
   vars:
+    asg_id: ee-asg
     region: "{{ lookup('env', 'AWS_REGION') or 'eu-west-2' }}"
     regions:
       eu-west-2:
@@ -46,7 +47,7 @@
 
     - name: Instance Security Group
       ec2_group:
-        name: "ee-asg-{{ aws_env }}"
+        name: "{{ asg_id }}-{{ aws_env }}"
         description: "Allow access for HTTP from the ELB"
         vpc_id: "{{ vpc_id }}"
         rules:
@@ -107,11 +108,11 @@
 
     - name: On-demand Autoscaling group
       ec2_asg:
-        name: "ee-asg-{{ aws_env }}"
+        name: "{{ asg_id }}-{{ aws_env }}"
         state: present
         tags:
           - Env: "{{ aws_env }}"
-            Name: ee-asg
+            Name: "{{ asg_id }}"
         desired_capacity: 1
         health_check_type: ELB
         launch_config_name: "{{launchconfig.name}}"
@@ -131,3 +132,5 @@
       ec2_lc:
         name: "ee_{{ aws_env }}-{{ old_lc_num }}"
         state: absent
+
+- import_playbook: vendor/dc_commonscripts/playbooks/tag_instances.yml asg_id='ee-asg'

@@ -23,13 +23,19 @@ system_packages:
   - postgresql-client-10
   - postgresql-client-common
   - python3-dev
-  - python-setuptools
+  - python3-pip
   - python-pip
   - unzip
 
-python_packages:
-  - virtualenv
+# Install s3 with pip as a python 2 dependency because we hit this bug:
+# https://github.com/s3tools/s3cmd/issues/930
+# and we want to authenticate using iam role instead of key
+python2_packages:
   - s3cmd
+
+python3_packages:
+  - ec2_tag_conditional
+  - virtualenv
 
 initfiles:
   - gunicorn

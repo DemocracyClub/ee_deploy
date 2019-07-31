@@ -22,17 +22,17 @@
     cron:
       name: "Scrape to find new elections"
       minute: 30
-      job: "manage-py-command snoop"
+      job: '/usr/local/bin/instance-tags "Env=prod" && /usr/local/bin/instance-tags "controller=True" && manage-py-command snoop'
 
   - name: Schedule 'Run database backup' job
     cron:
       name: "Run database backup"
       minute: 8
-      job: "output-on-error ~/backup_db_to_s3.sh"
+      job: '/usr/local/bin/instance-tags "Env=prod" && /usr/local/bin/instance-tags "controller=True" && output-on-error ~/backup_db_to_s3.sh'
 
   - name: "Schedule 'Generate map layers and sync to S3' job"
     cron:
       name: "Generate map layers and sync to S3"
       hour: 1
       minute: 40
-      job: "output-on-error ~/sync_map_layers_to_s3.sh"
+      job: '/usr/local/bin/instance-tags "Env=prod" && /usr/local/bin/instance-tags "controller=True" && output-on-error ~/sync_map_layers_to_s3.sh'
