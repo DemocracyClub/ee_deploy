@@ -2,16 +2,16 @@
 - hosts: 127.0.0.1
   connection: local
   vars:
-    asg_id: ee-asg
+    asg_id: ee_asg
     region: "{{ lookup('env', 'AWS_REGION') or 'eu-west-2' }}"
     regions:
       eu-west-2:
-        ami_id: ami-03bcbffb3b14647c4
+        ami_id: ami-049ac236bcd704630
         # The default VPC
         vpc_id: vpc-110bfc78
     vpc_id: "{{ regions[region].vpc_id }}"
     ami_id: "{{ regions[region].ami_id }}"
-    lc_num: 78
+    lc_num: 80
 
     elb_ssl_arn: "arn:aws:acm:eu-west-2:929325949831:certificate/f353d7fd-fc69-44da-91c5-2bf8225e44ce"
     old_lc_num: "{{ lc_num - 1 }}"
@@ -89,7 +89,7 @@
         subnets: "{{ subnets.subnets | map(attribute='id') |list }}"
         tags:
           Env: "{{ aws_env }}"
-          Name: "ee-{{ aws_env }}"
+          Name: "ee_{{ aws_env }}"
       register: elb_result
 
 
@@ -133,4 +133,4 @@
         name: "ee_{{ aws_env }}-{{ old_lc_num }}"
         state: absent
 
-- import_playbook: vendor/dc_commonscripts/playbooks/tag_instances.yml asg_id='ee-asg'
+- import_playbook: vendor/dc_commonscripts/playbooks/tag_instances.yml asg_id='ee_asg'
