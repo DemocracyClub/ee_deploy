@@ -1,6 +1,7 @@
 ---
 ansible_python_interpreter: /usr/bin/python3
 project_name: every_election
+staging_db_name: ee_staging
 project_root: /var/www/every_election
 app_name: every_election
 project_repo: https://github.com/DemocracyClub/EveryElection.git
