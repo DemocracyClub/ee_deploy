@@ -30,6 +30,13 @@
       minute: 8
       job: '/usr/local/bin/instance-tags "Env=prod" && /usr/local/bin/instance-tags "controller=True" && output-on-error ~/backup_db_to_s3.sh'
 
+  - name: "Schedule 'Rebuild Staging DB' job"
+    cron:
+      name: "Rebuild Staging DB"
+      hour: 4
+      minute: 45
+      job: '/usr/local/bin/instance-tags "Env=prod" && /usr/local/bin/instance-tags "controller=True" && output-on-error ~/rebuild_staging_db.sh'
+
   - name: "Schedule 'Generate map layers and sync to S3' job"
     cron:
       name: "Generate map layers and sync to S3"

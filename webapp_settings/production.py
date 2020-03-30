@@ -117,8 +117,8 @@ if SERVER_ENVIRONMENT in ['prod', 'test']:
         DATABASES['default']['NAME'] = '{{ project_name }}'
         DATABASES['replicas']['NAME'] = '{{ project_name }}'
     if SERVER_ENVIRONMENT == 'test':
-        DATABASES['default']['NAME'] = 'ee_staging'
-        DATABASES['replicas']['NAME'] = 'ee_staging'
+        DATABASES['default']['NAME'] = '{{ staging_db_name }}'
+        DATABASES['replicas']['NAME'] = '{{ staging_db_name }}'
     DATABASE_ROUTERS = ["every_election.db_routers.DbRouter"]
 
 

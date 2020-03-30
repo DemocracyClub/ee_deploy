@@ -151,6 +151,14 @@
       group: every_election
       mode: 0755
 
+  - name: Install rebuild_staging_db script
+    template:
+      src: "files/scripts/rebuild_staging_db.sh"
+      dest: "{{ project_root }}/home/rebuild_staging_db.sh"
+      owner: every_election
+      group: every_election
+      mode: 0755
+
   - name: Install sync_map_layers_to_s3
     template:
       src: "files/scripts/sync_map_layers_to_s3.sh"
