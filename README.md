@@ -2,7 +2,7 @@
 
 ## Setup
 
-* Install [packer](https://releases.hashicorp.com/packer/0.12.3/packer_0.12.3_linux_amd64.zip)
+* Install [packer](https://releases.hashicorp.com/packer/0.12.3/packer_0.12.3_linux_amd64.zip) - (download the binary and put it on your path.)
 * `pipenv install`
 * `ansible-galaxy install -r requirements.yml`
 * Ensure your AWS credentials are in `~/.aws/credentials`
