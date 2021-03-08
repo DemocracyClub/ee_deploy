@@ -52,6 +52,7 @@
   - name: Upgrade NPM
     npm:
       name: npm
+      version: "6.14.11"
       global: true
       state: latest
 
