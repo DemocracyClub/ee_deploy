@@ -99,7 +99,7 @@
         assign_public_ip: yes
         image_id: "{{ ami_id }}"
         instance_type: t3.medium
-        security_groups: ["{{ sg_instance.group_id }}"]
+        security_groups: ["{{ sg_instance.group_id }}", "sg-807bc0e9"]
         user_data: "{{lookup('template', 'userdata.yml') }}"
         instance_profile_name: ee-packer-ami-builder
       register: launchconfig
