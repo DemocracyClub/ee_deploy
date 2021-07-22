@@ -21,6 +21,8 @@
       "source_ami": "{{user `ubuntu_ami_id` }}",
       "spot_price": "{{user `max_spot_price` }}",
       "ssh_username": "ubuntu",
+      "ssh_timeout": "10m",
+      "ssh_interface": "public_ip",
       "tags": {
         "application": "{{user `app_name` }}",
         "build_date":"{{isotime}}"
