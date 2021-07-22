@@ -38,6 +38,10 @@
         "application": "{{user `app_name` }}",
         "build_date":"{{isotime}}"
       },
+      "fleet_tags": {
+        "application": "{{user `app_name` }}",
+        "build_date":"{{isotime}}"
+      },
       "launch_block_device_mappings": [
         {
           "device_name": "/dev/sda1",
