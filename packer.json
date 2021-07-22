@@ -13,7 +13,7 @@
       "type": "amazon-ebs",
       "ssh_keypair_name": "eu-london-provisioning",
       "ssh_private_key_file": "{{user `ssh_private_key_file` }}",
-      "ami_name": "ee {{isotime |clean_ami_name }}",
+      "ami_name": "ee {{isotime |clean_resource_name }}",
       "associate_public_ip_address": true,
       "iam_instance_profile": "ee-packer-ami-builder",
       "instance_type":"m4.large",
