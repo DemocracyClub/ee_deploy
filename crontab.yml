@@ -44,3 +44,10 @@
       hour: 1
       minute: 40
       job: '/usr/local/bin/instance-tags "Env=prod" && /usr/local/bin/instance-tags "controller=True" && output-on-error ~/sync_map_layers_to_s3.sh'
+
+  - name: "Add NUTS1 tags to any new elections"
+    cron:
+      name: "Add NUTS1 tags to any new elections"
+      hour: 2
+      minute: 15
+      job: 'manage-py-command add_tags add_tags -u "https://ons-cache.s3.eu-west-1.amazonaws.com/NUTS_Level_1_(January_2018)_Boundaries.geojson" --fields '{"NUTS118NM": "value", "NUTS118CD": "key"}' --tag-name NUTS1'
