@@ -23,7 +23,6 @@
       name: "Scrape to find new elections"
       minute: 30
       job: '/usr/local/bin/instance-tags "Env=prod" && /usr/local/bin/instance-tags "controller=True" && manage-py-command snoop'
-      disabled: yes
 
   - name: Schedule 'Run database backup' job
     cron:
