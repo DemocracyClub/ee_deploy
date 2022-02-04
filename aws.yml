@@ -6,12 +6,12 @@
     region: "{{ lookup('env', 'AWS_REGION') or 'eu-west-2' }}"
     regions:
       eu-west-2:
-        ami_id: ami-08f98e0d411c48837
+        ami_id: ami-05236aef777ef1606
         # The default VPC
         vpc_id: vpc-110bfc78
     vpc_id: "{{ regions[region].vpc_id }}"
     ami_id: "{{ regions[region].ami_id }}"
-    lc_num: 112
+    lc_num: 114
 
     elb_ssl_arn: "arn:aws:acm:eu-west-2:929325949831:certificate/f353d7fd-fc69-44da-91c5-2bf8225e44ce"
     old_lc_num: "{{ lc_num - 1 }}"
@@ -98,7 +98,7 @@
         name: "ee_{{ aws_env }}-{{ lc_num }}"
         assign_public_ip: yes
         image_id: "{{ ami_id }}"
-        instance_type: t3.medium
+        instance_type: t3a.large
         security_groups: ["{{ sg_instance.group_id }}", "sg-807bc0e9"]
         user_data: "{{lookup('template', 'userdata.yml') }}"
         instance_profile_name: ee-packer-ami-builder
