@@ -5,7 +5,7 @@ staging_db_name: ee_staging
 project_root: /var/www/every_election
 app_name: every_election
 project_repo: https://github.com/DemocracyClub/EveryElection.git
-branch: master
+branch: ubuntu-22.04-upgrade
 domain: elections.democracyclub.org.uk
 nickname: production
 cron_email: developers@democracyclub.org.uk
@@ -22,17 +22,17 @@ system_packages:
   - nodejs
   - npm
   - postfix
-  - postgresql-client-10
+  - postgresql-client-14
   - postgresql-client-common
+  - libpq-dev
   - python3-dev
   - python3-pip
-  - python-pip
   - unzip
 
 # Install s3 with pip as a python 2 dependency because we hit this bug:
 # https://github.com/s3tools/s3cmd/issues/930
 # and we want to authenticate using iam role instead of key
-python2_packages:
+python_packages:
   - s3cmd
 
 python3_packages:
